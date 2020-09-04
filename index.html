@@ -86,6 +86,7 @@
             <h2>Nhập vào số KM</h2>
             <input
               class="input100"
+              id="numberKM"
               type="text"
               name="name"
               placeholder="Số KM ..."
@@ -99,6 +100,7 @@
             <h2>Nhập thời gian chờ</h2>
             <input
               class="input100"
+              id="waitingTime"
               type="text"
               name="name"
               placeholder="Thời gian chờ  ..."
@@ -108,7 +110,7 @@
 
           <div class="wrap-contact100-form-btn">
             <div class="contact100-form-bgbtn"></div>
-            <button type="button" class="contact100-form-btn">TÍNH TIỀN</button>
+            <button type="button" class="contact100-form-btn" onclick="calcBill()">TÍNH TIỀN</button>
           </div>
           <div class="wrap-contact100-form-btn">
             <div class="contact100-form-bgbtn"></div>
@@ -116,7 +118,9 @@
               type="button"
               class="contact100-form-btn"
               data-toggle="modal"
-              data-target="#exampleModal"
+              data-target="#myModal"
+              id="buttonPrint"
+              onclick="printBill()"
             >
               IN HÓA ĐƠN
             </button>
@@ -133,12 +137,48 @@
         </div>
       </div>
     </div>
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+    
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Hóa Đơn</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+    
+          <!-- Modal body -->
+          <div class="modal-body">
+            <table class="table">
+              <thead>
+                  <tr>
+                      <th>Chi tiết</th>
+                      <th>Sử dụng</th>
+                      <th>Đơn giá</th>
+                      <th>Thành Tiền</th>
+                  </tr>
+              </thead>
+              <tbody id="tbodyTaxiBill">
+
+              </tbody>
+          </table>
+          </div>
+    
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+    
+        </div>
+      </div>
+    </div>
 
     <!--===============================================================================================-->
     <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
     <script src="vendor/animsition/js/animsition.min.js"></script>
     <!--===============================================================================================-->
+    <script src="./vendor/bootstrap/js/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKFWBqlKAGCeS1rMVoaNlwyayu0e0YRes"></script>
