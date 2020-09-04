@@ -22,7 +22,7 @@ function calcBill() {
         
         getEle("xuatTien").innerHTML = taxiFee.calcSumWaitingFee() + taxiFee.calcSumTaxiFee();
         getEle("divThanhTien").style.display = "block";
-    }
+    };
     
 }
 
@@ -52,8 +52,80 @@ function checkTaxiType() {
         default:
             index = -1;
             break;
-    }
+    };
     return index;
+}
+
+function printBill() {
+    getEle("tbodyTaxiBill").innerHTML = "";
+    calcBill();
+    var tagTR;
+    //tạo hàng cho tiền taxi theo từng mức km
+    if (taxiFee.numberKM <=1) {
+        tagTR = printTR(taxiFee.taxiType, 1, taxiFee.theFirstKM, " km" );
+        getEle("tbodyTaxiBill").appendChild(tagTR);
+    }else if (taxiFee.numberKM <=20 ) {
+        tagTR = printTR(taxiFee.taxiType, 1, taxiFee.theFirstKM, " km" );
+        getEle("tbodyTaxiBill").appendChild(tagTR);
+
+        tagTR = printTR(taxiFee.taxiType, (parseFloat(taxiFee.numberKM) - 1), taxiFee.from1To20KM, " km");
+        getEle("tbodyTaxiBill").appendChild(tagTR);
+    }else {
+        tagTR = printTR(taxiFee.taxiType, 1, taxiFee.theFirstKM, " km" );
+        getEle("tbodyTaxiBill").appendChild(tagTR);
+
+        tagTR = printTR(taxiFee.taxiType, 19, taxiFee.from1To20KM, " km" );
+        getEle("tbodyTaxiBill").appendChild(tagTR);
+
+        tagTR = printTR(taxiFee.taxiType, (parseFloat(taxiFee.numberKM) - 20), taxiFee.higher21KM, " km");
+        getEle("tbodyTaxiBill").appendChild(tagTR);
+    };
+
+    //tạo hàng cho phí chờ. Làm tròn lên cho thời gian chờ
+    if (taxiFee.waitingTime != "") {
+        tagTR = printTR("Thời gian chờ", Math.ceil(taxiFee.waitingTime), taxiFee.waitingFee, " phút" );
+        getEle("tbodyTaxiBill").appendChild(tagTR);
+    };
+
+    //tạo hàng cho total
+    tagTR = printTR("Total", "", (taxiFee.calcSumWaitingFee() + taxiFee.calcSumTaxiFee()) , "" );
+    tagTR.style.backgroundColor = "#c9f2da";
+    tagTR.style.color = "#006135";
+    getEle("tbodyTaxiBill").appendChild(tagTR);
+
+    //Hiện modal
+    getEle("buttonPrint").dataset.target = "#myModal";
+
+}
+
+//tạo dòng cho bảng bill
+function printTR(type, used, price, text) {
+    //tạo dòng
+    var tagTR = document.createElement("tr");
+    var tagTD_ChiTiet = document.createElement("td");
+    var tagTD_SuDung = document.createElement("td");
+    var tagTD_DonGia = document.createElement("td");
+    var tagTD_ThanhTien = document.createElement("td");
+
+    //tạo nội dung cho cột
+    tagTD_ChiTiet.innerHTML = type;
+    tagTD_SuDung.innerHTML = used + text;
+    
+    if (type == "Total") {
+        tagTD_DonGia.innerHTML = "";
+        tagTD_ThanhTien.innerHTML = parseFloat(price);
+    } else {
+        tagTD_DonGia.innerHTML = price;
+        tagTD_ThanhTien.innerHTML = parseFloat(used)*parseFloat(price);
+    };
+
+    //gắn cột vào dòng
+    tagTR.appendChild(tagTD_ChiTiet);
+    tagTR.appendChild(tagTD_SuDung);
+    tagTR.appendChild(tagTD_DonGia);
+    tagTR.appendChild(tagTD_ThanhTien);
+
+    return tagTR;
 }
 
 function getEle(id) {
